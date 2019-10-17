@@ -55,15 +55,17 @@ echo "sudo ifconfig bat0 up" >> "${mount}/home/pi/start-batman-adv.sh"
 chmod +x "${mount}/home/pi/start-batman-adv.sh"
 
 echo "Add service"
-echo "[Unit]" > "${mount}/etc/systemd/system/start-batman-adv"
-echo "Description=Start batman-adv" >> "${mount}/etc/systemd/system/start-batman-adv"
-echo "[Service]" >> "${mount}/etc/systemd/system/start-batman-adv"
-echo "Type=simple" >> "${mount}/etc/systemd/system/start-batman-adv"
-echo "ExecStart=/home/pi/start-batman-adv.sh" >> "${mount}/etc/systemd/system/start-batman-adv"
-echo "[Install]" >> "${mount}/etc/systemd/system/start-batman-adv"
-echo "WantedBy=multi-user.target" >> "${mount}/etc/systemd/system/start-batman-adv"
-systemctl daemon-reload
-systemctl enable start-batman-adv
+echo "[Unit]" > "${mount}/etc/systemd/system/start-batman-adv.service"
+echo "Description=Start batman-adv" >> "${mount}/etc/systemd/system/start-batman-adv.service"
+echo "[Service]" >> "${mount}/etc/systemd/system/start-batman-adv.service"
+echo "Type=simple" >> "${mount}/etc/systemd/system/start-batman-adv.service"
+echo "ExecStart=/home/pi/start-batman-adv.sh" >> "${mount}/etc/systemd/system/start-batman-adv.service"
+echo "[Install]" >> "${mount}/etc/systemd/system/start-batman-adv.service"
+echo "WantedBy=multi-user.target" >> "${mount}/etc/systemd/system/start-batman-adv.service"
+
+ln -s '/etc/systemd/system/start-batman-adv.service' '/etc/systemd/multi-user.target.wants/start-batman-adv.service'
+
+
 
 echo "Congratulations! Your custom Raspbian is ready!"
 
