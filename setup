@@ -20,6 +20,9 @@ cat "${mount}/etc/fstab"
 rm /etc/init.d/resize2fs_once
 rm /etc/rc3.d/S01resize2fs_once
 
+echo "Fix keyboard layout"
+sed -i 's/XKBLAYOUT="gb"/XKBLAYOUT="de"/g' /etc/defaults/keyboard
+
 echo "Installing packages."
 apt-get -y update
 apt-get -y install git batctl
