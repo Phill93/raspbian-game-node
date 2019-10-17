@@ -1,0 +1,26 @@
+dist: bionic
+sudo: required
+addons:
+  apt:
+    packages:
+    - qemu
+    - qemu-user-static
+    - binfmt-support
+    - parted
+    - wget
+    - dosfstools
+    - zip
+script:
+- sudo bash ./create-image
+- zip $(basename $TRAVIS_REPO_SLUG).img.zip $(basename $TRAVIS_REPO_SLUG).img
+- shasum $(basename $TRAVIS_REPO_SLUG).img.zip > $(basename $TRAVIS_REPO_SLUG).img.zip.sha1
+deploy:
+  provider: releases
+  api_key:
+    secure: eXIX1Z621z/KMIITv/7lpdHHO8fo7zU5pSGD8oHoH/O36IO0YKbNQHf5VfPbEUyUJfZaH37ZbwOAZ2WSMNxR4zbq+skn00wYvHRy8V73/6opWL5p6kZfbVVOK5nNb9pU31BYCoU94rL9wPJasQVj85eiw/Guvp+4hNOP4pWyVJFO+aGArFJHCZAd6HqoUVgEwRhteTxhTSo+wAzdMTWfVtCXnZ/UEmBIZZUglM6SFe3mPwLnP1rgbDbLKT8c4ZmyCNL03CaDIWms/QHeqj0Bx3ty5SU22Xl1ZUG1iYxGGoT0n2o6rKKtquFeZwnyOJEdNT54jxZP8AAS3oD2y5hiCJ+RlKAmu6+Ea5xtkjX5agmSgqb6eAMZ3fOidPnpuxVkQj0/L5R/kaKIKcOa5tr9TFgVJo/2/KlZPEzSs0+mRyUH5zLDghl2KlrJ9YGaJSzL0n25d+dr+66+ygvwDWz5wkJW/Ta854vxbbl8A7UZ2hpTe0R2mU7GI3YGnzEJGE/ViOplpSVv60dV/thecqdJ1PIZKOtodAoABZFumu9dVhgSJ7tuXzpvOHgWwR5tU6Tr1T3hZ5K5FhxkMviZ7pvgceMDfzw5UKK2QGqneL4QLRVCqC1PSZsp/FGUeFx4rbef6qJRop648AL9ZJ2RY450w/o+rFOS3xvpEnfmVtr3hpQ=
+  file: 
+    - "$(basename $TRAVIS_REPO_SLUG).img.zip"
+    - "$(basename $TRAVIS_REPO_SLUG).img.zip.sha1"
+  skip_cleanup: true
+  on:
+    tags: true
