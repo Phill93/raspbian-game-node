@@ -63,7 +63,7 @@ echo "ExecStart=/home/pi/start-batman-adv.sh" >> "${mount}/etc/systemd/system/st
 echo "[Install]" >> "${mount}/etc/systemd/system/start-batman-adv.service"
 echo "WantedBy=multi-user.target" >> "${mount}/etc/systemd/system/start-batman-adv.service"
 
-ln -s '/etc/systemd/system/start-batman-adv.service' '/etc/systemd/multi-user.target.wants/start-batman-adv.service'
+ln -s '/etc/systemd/system/start-batman-adv.service' '/etc/systemd/system/multi-user.target.wants/start-batman-adv.service'
 
 
 
