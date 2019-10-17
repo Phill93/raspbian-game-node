@@ -22,7 +22,13 @@ rm /etc/rc3.d/S01resize2fs_once
 
 echo "Installing packages."
 apt-get -y update
-apt-get -y install git
+apt-get -y install git batctl
+
+echo "Load batman-adv kernel module at boot"
+echo 'batman-adv' | sudo tee --append /etc/modules
+
+echo "Disable DHCPD on wlan0"
+echo 'denyinterfaces wlan0' | sudo tee --append /etc/dhcpcd.conf
 
 echo "Congratulations! Your custom Raspbian is ready!"
 
