@@ -21,6 +21,6 @@ deploy:
   file: 
     - "$(basename $TRAVIS_REPO_SLUG).img.zip"
     - "$(basename $TRAVIS_REPO_SLUG).img.zip.sha1"
-skip_cleanup: true
-on:
-  tags: true
+  skip_cleanup: true
+  on:
+    tags: true
