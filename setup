@@ -4,8 +4,10 @@ echo "Hello. This is setup."
 
 if [ $1 == "test" ]; then
     USR="vagrant"
+    IF="eth1"
 else
     USR="pi"
+    IF="wlan0"
 fi
 
 
@@ -38,27 +40,27 @@ apt-get -y install git batctl
 echo "Load batman-adv kernel module at boot"
 echo 'batman-adv' | sudo tee --append /etc/modules
 
-echo "Disable DHCPD on wlan0"
-echo 'denyinterfaces wlan0' | sudo tee --append /etc/dhcpcd.conf
+echo "Disable DHCPD on ${IF}"
+echo 'denyinterfaces ${IF}' | sudo tee --append /etc/dhcpcd.conf
 
 echo "Add Network configuration files"
 # bat0
 echo "auto bat0" > "${mount}/etc/network/interfaces.d/bat0"
 echo "iface bat0 inet auto" >> "${mount}/etc/network/interfaces.d/bat0"
-echo "    pre-up /usr/sbin/batctl if add wlan0" >> "${mount}/etc/network/interfaces.d/bat0"
-# wlan0
-echo "auto wlan0" > "${mount}/etc/network/interfaces.d/wlan0"
-echo "iface wlan0 inet manual" >> "${mount}/etc/network/interfaces.d/wlan0"
-echo "    mtu 1532" >> "${mount}/etc/network/interfaces.d/wlan0"
-echo "    wireless-channel 1" >> "${mount}/etc/network/interfaces.d/wlan0"
-echo "    wireless-essid game-mesh" >> "${mount}/etc/network/interfaces.d/wlan0"
-echo "    wireless-mode ad-hoc" >> "${mount}/etc/network/interfaces.d/wlan0"
-echo "    wireless-ap 6a:2b:90:3b:54:98" >> "${mount}/etc/network/interfaces.d/wlan0"
+echo "    pre-up /usr/sbin/batctl if add ${IF}" >> "${mount}/etc/network/interfaces.d/bat0"
+# interface for mesh
+echo "auto ${IF}" > "${mount}/etc/network/interfaces.d/${IF}"
+echo "iface ${IF} inet manual" >> "${mount}/etc/network/interfaces.d/${IF}"
+echo "    mtu 1532" >> "${mount}/etc/network/interfaces.d/${IF}"
+echo "    wireless-channel 1" >> "${mount}/etc/network/interfaces.d/${IF}"
+echo "    wireless-essid game-mesh" >> "${mount}/etc/network/interfaces.d/${IF}"
+echo "    wireless-mode ad-hoc" >> "${mount}/etc/network/interfaces.d/${IF}"
+echo "    wireless-ap 6a:2b:90:3b:54:98" >> "${mount}/etc/network/interfaces.d/${IF}"
 
 echo "Add startscript for batman"
 echo "#!/bin/bash" > "${mount}/home/$USR/start-batman-adv.sh"
-echo "sudo batctl if add wlan0" >> "${mount}/home/$USR/start-batman-adv.sh"
-echo "sudo ifconfig wlan0 up" >> "${mount}/home/$USR/start-batman-adv.sh"
+echo "sudo batctl if add ${IF}" >> "${mount}/home/$USR/start-batman-adv.sh"
+echo "sudo ifconfig ${IF} up" >> "${mount}/home/$USR/start-batman-adv.sh"
 echo "sudo ifconfig bat0 up" >> "${mount}/home/$USR/start-batman-adv.sh"
 chmod +x "${mount}/home/$USR/start-batman-adv.sh"
 
@@ -81,5 +83,6 @@ if [ $1 != "test" ]; then
 echo "Disk space"
 df -h
 else
+echo "Rebooting"
 reboot
 fi
