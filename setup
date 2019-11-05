@@ -35,8 +35,7 @@ if [ $1 != "test" ]; then
 fi
 echo "Installing packages."
 apt-get -y update
-apt-get -y install git batctl
-
+apt-get -y install git batctl alfred
 echo "Load batman-adv kernel module at boot"
 echo 'batman-adv' | sudo tee --append /etc/modules
 
@@ -46,8 +45,11 @@ echo 'denyinterfaces ${IF}' | sudo tee --append /etc/dhcpcd.conf
 echo "Add Network configuration files"
 # bat0
 echo "auto bat0" > "${mount}/etc/network/interfaces.d/bat0"
-echo "iface bat0 inet auto" >> "${mount}/etc/network/interfaces.d/bat0"
-echo "    pre-up /usr/sbin/batctl if add ${IF}" >> "${mount}/etc/network/interfaces.d/bat0"
+echo "iface bat0 inet manual" >> "${mount}/etc/network/interfaces.d/bat0"
+echo "  pre-up ip link add \$IFACE type batadv" >> "${mount}/etc/network/interfaces.d/bat0"
+echo "  up ip link set up dev \$IFACE" >> "${mount}/etc/network/interfaces.d/bat0"
+echo "  post-down ip link del \$IFACE" >> "${mount}/etc/network/interfaces.d/bat0"
+
 # interface for mesh
 echo "auto ${IF}" > "${mount}/etc/network/interfaces.d/${IF}"
 echo "iface ${IF} inet manual" >> "${mount}/etc/network/interfaces.d/${IF}"
@@ -57,24 +59,20 @@ echo "    wireless-essid game-mesh" >> "${mount}/etc/network/interfaces.d/${IF}"
 echo "    wireless-mode ad-hoc" >> "${mount}/etc/network/interfaces.d/${IF}"
 echo "    wireless-ap 6a:2b:90:3b:54:98" >> "${mount}/etc/network/interfaces.d/${IF}"
 
-echo "Add startscript for batman"
-echo "#!/bin/bash" > "${mount}/home/$USR/start-batman-adv.sh"
-echo "sudo batctl if add ${IF}" >> "${mount}/home/$USR/start-batman-adv.sh"
-echo "sudo ifconfig ${IF} up" >> "${mount}/home/$USR/start-batman-adv.sh"
-echo "sudo ifconfig bat0 up" >> "${mount}/home/$USR/start-batman-adv.sh"
-chmod +x "${mount}/home/$USR/start-batman-adv.sh"
+echo "Add service for alfred"
+echo "[Unit]" > "${mount}/etc/systemd/system/start-alfred.service"
+echo "Description=Alfred Master" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "After=network-online.target" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "[Service]" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "Type=simple" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "ExecStart=/usr/sbin/alfred -m -i bat0 -b none -u /var/run/alfred.sock" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "WorkingDirectory=/tmp" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "RestartSec=10" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "Restart=always" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "[Install]" >> "${mount}/etc/systemd/system/start-alfred.service"
+echo "WantedBy=multi-user.target" >> "${mount}/etc/systemd/system/start-alfred.service"
 
-echo "Add service"
-echo "[Unit]" > "${mount}/etc/systemd/system/start-batman-adv.service"
-echo "Description=Start batman-adv" >> "${mount}/etc/systemd/system/start-batman-adv.service"
-echo "[Service]" >> "${mount}/etc/systemd/system/start-batman-adv.service"
-echo "Type=simple" >> "${mount}/etc/systemd/system/start-batman-adv.service"
-echo "ExecStart=/home/$USR/start-batman-adv.sh" >> "${mount}/etc/systemd/system/start-batman-adv.service"
-echo "[Install]" >> "${mount}/etc/systemd/system/start-batman-adv.service"
-echo "WantedBy=multi-user.target" >> "${mount}/etc/systemd/system/start-batman-adv.service"
-
-ln -s '/etc/systemd/system/start-batman-adv.service' '/etc/systemd/system/multi-user.target.wants/start-batman-adv.service'
-
+ln -s '/etc/systemd/system/start-alfred.service' '/etc/systemd/system/multi-user.target.wants/start-alfred.service'
 
 
 echo "Congratulations! Your custom Raspbian is ready!"
