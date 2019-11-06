@@ -35,7 +35,7 @@ if [ $1 != "test" ]; then
 fi
 echo "Installing packages."
 apt-get -y update
-apt-get -y install git batctl alfred
+apt-get -y install git batctl alfred wget libssl-dev ncurses-dev
 echo "Load batman-adv kernel module at boot"
 echo 'batman-adv' | sudo tee --append /etc/modules
 
@@ -74,6 +74,23 @@ echo "WantedBy=multi-user.target" >> "${mount}/etc/systemd/system/start-alfred.s
 
 ln -s '/etc/systemd/system/start-alfred.service' '/etc/systemd/system/multi-user.target.wants/start-alfred.service'
 
+echo "Installing Erlang OTP"
+cd
+wget -nv http://www.erlang.org/download/otp_src_22.1.tar.gz
+tar -xzvf otp_src_22.1.tar.gz
+cd otp_src_22.1/
+./configure
+make
+sudo make install
+cd ..
+rm otp_src_22.1.tar.gz
+sudo rm -R otp_src_22.1
+
+echo "Installing vernemq"
+cd
+git clone -b 1.6.1 https://github.com/larshesel/vernemq.git
+cd vernemq
+make rpi32
 
 echo "Congratulations! Your custom Raspbian is ready!"
 
