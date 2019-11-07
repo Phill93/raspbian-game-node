@@ -88,9 +88,22 @@ sudo rm -R otp_src_22.1
 
 echo "Installing vernemq"
 cd
-git clone -b 1.6.1 https://github.com/larshesel/vernemq.git
+git clone -b 1.9.2 https://github.com/vernemq/vernemq.git
 cd vernemq
+if [ $1 != "test" ]; then
 make rpi32
+else
+make rel
+fi
+
+echo "*               soft     nofile          65536" >> /etc/security/limits.conf
+echo "*               hard     nofile          65536" >> /etc/security/limits.conf
+
+if [ $1 != "test" ]; then
+echo "export PATH=$PATH:/home/pi/vernemq/_build/rpi32/rel/vernemq/bin" >> ~/.bashrc
+else
+echo "export PATH=$PATH:/home/pi/vernemq/_build/default/rel/vernemq/bin" >> ~/.bashrc
+fi
 
 echo "Congratulations! Your custom Raspbian is ready!"
 
