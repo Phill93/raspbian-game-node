@@ -85,6 +85,38 @@ git clone -b 1.9.2 https://github.com/vernemq/vernemq.git
 cd vernemq
 make rpi32
 
+adduser -d blubb -M -r vernemq
+
+vernemq_path="$(pwd)/_build/default/rel/vernemq"
+
+# etc
+cp -r ${vernemq_path}/etc /etc/vernemq
+chown -r root:root /etc/vernemq
+# usr/bin
+cp -r ${vernemq_path}/bin/vernemq /usr/bin/vernemq
+chown root:root /usr/bin/vernemq
+chmod +x /usr/bin/vernemq
+cp -r ${vernemq_path}/bin/vmq-admin /usr/bin/vmq-admin
+chown root:root /usr/bin/vmq-admin
+chmod +x /usr/bin/vmq-admin
+cp -r ${vernemq_path}/bin/vmq-passwd /usr/bin/vmq-passwd
+chown root:root /usr/bin/vmq-passwd
+chmod +x /usr/bin/vmq-passwd
+# usr/lib
+mkdir -p /usr/lib/vernemq
+cp -r ${vernemq_path}/bin /usr/lib/vernemq/bin
+chmod +x /usr/lib/vernemq/bin
+cp -r ${vernemq_path}/erts-10.5.5 /usr/lib/vernemq/erts-10.5.5
+cp -r ${vernemq_path}/lib /usr/lib/vernemq/lib
+cp -r ${vernemq_path}/releases /usr/lib/vernemq/releases
+# usr/share
+cp -r ${vernemq_path}/share /usr/share/vernemq
+# var/lib
+mkdir -p /var/lib/vernemq
+cp -r ${vernemq_path}/data /var/lib/vernemq/data
+# var/log
+cp -r ${vernemq_path}/log /var/lib/vernemq
+
 echo "*               soft     nofile          65536" >> /etc/security/limits.conf
 echo "*               hard     nofile          65536" >> /etc/security/limits.conf
 
