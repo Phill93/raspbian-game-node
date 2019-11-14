@@ -85,7 +85,7 @@ git clone -b 1.9.2 https://github.com/vernemq/vernemq.git
 cd vernemq
 make rpi32
 
-adduser -d blubb -M -r vernemq
+adduser --system --group --home /usr/lib/vernemq vernemq
 
 vernemq_path="$(pwd)/_build/default/rel/vernemq"
 
@@ -109,6 +109,7 @@ chmod +x /usr/lib/vernemq/bin
 cp -r ${vernemq_path}/erts-10.5.5 /usr/lib/vernemq/erts-10.5.5
 cp -r ${vernemq_path}/lib /usr/lib/vernemq/lib
 cp -r ${vernemq_path}/releases /usr/lib/vernemq/releases
+chown -R vernemq:vernemq /usr/lib/vernemq
 # usr/share
 cp -r ${vernemq_path}/share /usr/share/vernemq
 # var/lib
