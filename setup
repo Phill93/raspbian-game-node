@@ -26,6 +26,9 @@ rm /etc/rc3.d/S01resize2fs_once
 echo "Fix keyboard layout"
 sed -i 's/XKBLAYOUT="gb"/XKBLAYOUT="de"/g' /etc/default/keyboard
 
+echo "Fix locale"
+locale-gen en_US.UTF-8
+
 echo "Installing packages."
 apt-get -y update
 apt-get -y install git batctl alfred wget libssl-dev ncurses-dev
