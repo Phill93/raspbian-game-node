@@ -90,7 +90,7 @@ make rpi32
 
 adduser --system --group --home /usr/lib/vernemq vernemq
 
-vernemq_path="$(pwd)/_build/default/rel/vernemq"
+vernemq_path="$(pwd)/_build/rpi32/rel/vernemq"
 
 # etc
 cp -r ${vernemq_path}/etc /etc/vernemq
