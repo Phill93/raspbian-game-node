@@ -76,7 +76,7 @@ wget -nv http://www.erlang.org/download/otp_src_22.1.tar.gz
 tar -xzvf otp_src_22.1.tar.gz
 cd otp_src_22.1/
 ./configure
-make
+make -j 2
 sudo make install
 cd ..
 rm otp_src_22.1.tar.gz
@@ -86,15 +86,15 @@ echo "Installing vernemq"
 cd
 git clone -b 1.9.2 https://github.com/vernemq/vernemq.git
 cd vernemq
-make rpi32
+make rpi32 -j 2
 
 adduser --system --group --home /usr/lib/vernemq vernemq
 
-vernemq_path="$(pwd)/_build/rpi32/rel/vernemq"
+export vernemq_path="$(pwd)/_build/default/rel/vernemq"
 
 # etc
 cp -r ${vernemq_path}/etc /etc/vernemq
-chown -r root:root /etc/vernemq
+chown -R root:root /etc/vernemq
 # usr/bin
 cp -r ${vernemq_path}/bin/vernemq /usr/bin/vernemq
 chown root:root /usr/bin/vernemq
@@ -118,13 +118,14 @@ cp -r ${vernemq_path}/share /usr/share/vernemq
 # var/lib
 mkdir -p /var/lib/vernemq
 cp -r ${vernemq_path}/data /var/lib/vernemq/data
+chown -R vernemq:vernemq /var/lib/vernemq
 # var/log
-cp -r ${vernemq_path}/log /var/lib/vernemq
+cp -r ${vernemq_path}/log /var/log/vernemq
+chown -R vernemq:vernemq /var/log/vernemq
 
-echo "*               soft     nofile          65536" >> /etc/security/limits.conf
-echo "*               hard     nofile          65536" >> /etc/security/limits.conf
-
-echo "export PATH=$PATH:/home/pi/vernemq/_build/rpi32/rel/vernemq/bin" >> ~/.bashrc
+touch /etc/security/limits.d/vernemq.conf
+echo "vernemq               soft     nofile          65536" >> /etc/security/limits.d/vernemq.conf
+echo "vernemq               hard     nofile          65536" >> /etc/security/limits.d/vernemq.conf
 
 echo "Congratulations! Your custom Raspbian is ready!"
 
