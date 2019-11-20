@@ -86,7 +86,7 @@ echo "Installing vernemq"
 cd
 git clone -b 1.9.2 https://github.com/vernemq/vernemq.git
 cd vernemq
-make rpi32 -j 2
+OVERLAY_VARS=vars/deb_vars.config make rpi32 -j 4
 
 adduser --system --group --home /usr/lib/vernemq vernemq
 
