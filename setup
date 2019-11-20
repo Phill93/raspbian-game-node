@@ -109,7 +109,7 @@ chmod +x /usr/bin/vmq-passwd
 mkdir -p /usr/lib/vernemq
 cp -r ${vernemq_path}/bin /usr/lib/vernemq/bin
 chmod +x /usr/lib/vernemq/bin
-cp -r ${vernemq_path}/erts-10.5.5 /usr/lib/vernemq/erts-10.5.5
+cp -r ${vernemq_path}/erts-10.5 /usr/lib/vernemq/erts-10.5
 cp -r ${vernemq_path}/lib /usr/lib/vernemq/lib
 cp -r ${vernemq_path}/releases /usr/lib/vernemq/releases
 chown -R vernemq:vernemq /usr/lib/vernemq
