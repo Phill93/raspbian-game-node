@@ -84,7 +84,7 @@ sudo rm -R otp_src_22.1
 
 echo "Installing vernemq"
 cd
-git clone -b 1.9.2 https://github.com/vernemq/vernemq.git
+git clone -b master https://github.com/vernemq/vernemq.git
 cd vernemq
 OVERLAY_VARS=vars/deb_vars.config make rpi32 -j 4
 
