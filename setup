@@ -49,7 +49,6 @@ echo "  post-down ip link del \$IFACE" >> "${mount}/etc/network/interfaces.d/bat
 # interface for mesh
 echo "auto ${IF}" > "${mount}/etc/network/interfaces.d/${IF}"
 echo "iface ${IF} inet manual" >> "${mount}/etc/network/interfaces.d/${IF}"
-echo "    mtu 1532" >> "${mount}/etc/network/interfaces.d/${IF}"
 echo "    wireless-channel 1" >> "${mount}/etc/network/interfaces.d/${IF}"
 echo "    wireless-essid game-mesh" >> "${mount}/etc/network/interfaces.d/${IF}"
 echo "    wireless-mode ad-hoc" >> "${mount}/etc/network/interfaces.d/${IF}"
