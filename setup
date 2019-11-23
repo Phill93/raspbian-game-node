@@ -4,6 +4,7 @@ echo "Hello. This is setup."
 
 USR="pi"
 IF="wlan0"
+CPUS="2"
 
 # Replace /boot/cmdline.txt since it contains root device mapping to a PARTUUID that 
 # changed during parted resize. We try to disable the autoresize here as well.
@@ -75,7 +76,7 @@ wget -nv http://www.erlang.org/download/otp_src_22.1.tar.gz
 tar -xzvf otp_src_22.1.tar.gz
 cd otp_src_22.1/
 ./configure
-make -j 2
+make -j $CPUS
 sudo make install
 cd ..
 rm otp_src_22.1.tar.gz
@@ -85,7 +86,7 @@ echo "Installing vernemq"
 cd /home/$USR
 git clone -b master https://github.com/vernemq/vernemq.git
 cd vernemq
-OVERLAY_VARS=vars/deb_vars.config make rpi32 -j 4
+OVERLAY_VARS=vars/deb_vars.config make rpi32 -j $CPUS
 
 adduser --system --group --home /usr/lib/vernemq vernemq
 
