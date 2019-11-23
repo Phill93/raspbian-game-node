@@ -70,7 +70,7 @@ echo "WantedBy=multi-user.target" >> "${mount}/etc/systemd/system/start-alfred.s
 ln -s '/etc/systemd/system/start-alfred.service' '/etc/systemd/system/multi-user.target.wants/start-alfred.service'
 
 echo "Installing Erlang OTP"
-cd
+cd /home/$USR
 wget -nv http://www.erlang.org/download/otp_src_22.1.tar.gz
 tar -xzvf otp_src_22.1.tar.gz
 cd otp_src_22.1/
@@ -82,7 +82,7 @@ rm otp_src_22.1.tar.gz
 sudo rm -R otp_src_22.1
 
 echo "Installing vernemq"
-cd
+cd /home/$USR
 git clone -b master https://github.com/vernemq/vernemq.git
 cd vernemq
 OVERLAY_VARS=vars/deb_vars.config make rpi32 -j 4
