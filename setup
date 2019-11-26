@@ -41,32 +41,38 @@ echo 'denyinterfaces ${IF}' | sudo tee --append /etc/dhcpcd.conf
 
 echo "Add Network configuration files"
 # bat0
-echo "auto bat0" > "${mount}/etc/network/interfaces.d/bat0"
-echo "iface bat0 inet manual" >> "${mount}/etc/network/interfaces.d/bat0"
-echo "  pre-up ip link add \$IFACE type batadv" >> "${mount}/etc/network/interfaces.d/bat0"
-echo "  up ip link set up dev \$IFACE" >> "${mount}/etc/network/interfaces.d/bat0"
-echo "  post-down ip link del \$IFACE" >> "${mount}/etc/network/interfaces.d/bat0"
+cat <<EOF >>"${mount}/etc/network/interfaces.d/bat0"
+auto bat0
+iface bat0 inet manual
+  pre-up ip link add \$IFACE type batadv
+  up ip link set up dev \$IFACE
+  post-down ip link del \$IFACE
+EOF
 
 # interface for mesh
-echo "auto ${IF}" > "${mount}/etc/network/interfaces.d/${IF}"
-echo "iface ${IF} inet manual" >> "${mount}/etc/network/interfaces.d/${IF}"
-echo "    wireless-channel 1" >> "${mount}/etc/network/interfaces.d/${IF}"
-echo "    wireless-essid game-mesh" >> "${mount}/etc/network/interfaces.d/${IF}"
-echo "    wireless-mode ad-hoc" >> "${mount}/etc/network/interfaces.d/${IF}"
-echo "    wireless-ap 6a:2b:90:3b:54:98" >> "${mount}/etc/network/interfaces.d/${IF}"
+cat <<EOF >>"${mount}/etc/network/interfaces.d/${IF}"
+auto ${IF}
+iface ${IF} inet manual
+    wireless-channel 1
+    wireless-essid game-mesh
+    wireless-mode ad-hoc
+    wireless-ap 6a:2b:90:3b:54:98
+EOF
 
 echo "Add service for alfred"
-echo "[Unit]" > "${mount}/etc/systemd/system/start-alfred.service"
-echo "Description=Alfred Master" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "After=network-online.target" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "[Service]" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "Type=simple" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "ExecStart=/usr/sbin/alfred -m -i bat0 -b none -u /var/run/alfred.sock" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "WorkingDirectory=/tmp" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "RestartSec=10" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "Restart=always" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "[Install]" >> "${mount}/etc/systemd/system/start-alfred.service"
-echo "WantedBy=multi-user.target" >> "${mount}/etc/systemd/system/start-alfred.service"
+cat <<EOF >>"${mount}/etc/systemd/system/start-alfred.service"
+[Unit]
+Description=Alfred Master
+After=network-online.target
+[Service]
+Type=simple
+ExecStart=/usr/sbin/alfred -m -i bat0 -b none -u /var/run/alfred.sock
+WorkingDirectory=/tmp
+RestartSec=10
+Restart=always
+[Install]
+WantedBy=multi-user.target
+EOF
 
 ln -s '/etc/systemd/system/start-alfred.service' '/etc/systemd/system/multi-user.target.wants/start-alfred.service'
 
