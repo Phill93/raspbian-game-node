@@ -60,6 +60,8 @@ iface ${IF} inet manual
     wireless-ap 6a:2b:90:3b:54:98
 EOF
 
+echo "net.ipv6.conf.all.use_tempaddr=0" > /etc/sysctl.d/10-ipv6-slaac.conf
+
 echo "Add service for alfred"
 cat <<EOF >>"${mount}/etc/systemd/system/start-alfred.service"
 [Unit]
