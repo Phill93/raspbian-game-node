@@ -36,8 +36,8 @@ apt-get -y install git batctl alfred wget libssl-dev ncurses-dev
 echo "Load batman-adv kernel module at boot"
 echo 'batman-adv' | sudo tee --append /etc/modules
 
-echo "Disable DHCPD on ${IF}"
-echo 'denyinterfaces ${IF}' | sudo tee --append /etc/dhcpcd.conf
+echo "Disable DHCPCD on ${IF}"
+echo "denyinterfaces ${IF} bat0" | sudo tee --append /etc/dhcpcd.conf
 
 echo "Add Network configuration files"
 # bat0
