@@ -64,7 +64,7 @@ EOF
 echo "net.ipv6.conf.all.use_tempaddr=0" > /etc/sysctl.d/10-ipv6-slaac.conf
 
 echo "Add service for alfred"
-cat <<EOF >>"${mount}/etc/systemd/system/start-alfred.service"
+cat <<EOF >>"${mount}/etc/systemd/system/alfred.service"
 [Unit]
 Description=Alfred Master
 After=network-online.target
@@ -78,7 +78,18 @@ Restart=always
 WantedBy=multi-user.target
 EOF
 
-ln -s '/etc/systemd/system/start-alfred.service' '/etc/systemd/system/multi-user.target.wants/start-alfred.service'
+echo "Add service for batadv-vis"
+cat <<EOF >>"${mount}"/etc/systemd/system/batadv-vis.service"
+[Unit]
+Description=A.L.F.R.E.D. batadv-vis
+After=alfred.service
+
+[Service]
+ExecStart=/usr/bin/batadv-vis -s -i bat0
+
+[Install]
+WantedBy=multi-user.target
+EOF
 
 echo "Installing Erlang OTP"
 cd /home/$USR
