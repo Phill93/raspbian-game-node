@@ -79,7 +79,7 @@ WantedBy=multi-user.target
 EOF
 
 echo "Add service for batadv-vis"
-cat <<EOF >>"${mount}"/etc/systemd/system/batadv-vis.service"
+cat <<EOF >>"${mount}/etc/systemd/system/batadv-vis.service"
 [Unit]
 Description=A.L.F.R.E.D. batadv-vis
 After=alfred.service
