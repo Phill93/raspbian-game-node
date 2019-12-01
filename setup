@@ -85,7 +85,7 @@ Description=A.L.F.R.E.D. batadv-vis
 After=alfred.service
 
 [Service]
-ExecStart=/usr/bin/batadv-vis -s -i bat0
+ExecStart=/usr/sbin/batadv-vis -s -i bat0
 
 [Install]
 WantedBy=multi-user.target
