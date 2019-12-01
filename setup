@@ -163,6 +163,7 @@ After=network-online.target
 [Service]
 Type=simple
 ExecStart=/opt/raspbian-game-node-setup/setup.sh
+WorkingDirectory=/opt/raspbian-game-node-setup
 [Install]
 WantedBy=multi-user.target
 EOF
