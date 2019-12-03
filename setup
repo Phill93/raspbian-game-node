@@ -79,13 +79,13 @@ WantedBy=multi-user.target
 EOF
 
 echo "Add service for batadv-vis"
-cat <<EOF >>"${mount}"/etc/systemd/system/batadv-vis.service"
+cat <<EOF >>"${mount}/etc/systemd/system/batadv-vis.service"
 [Unit]
 Description=A.L.F.R.E.D. batadv-vis
 After=alfred.service
 
 [Service]
-ExecStart=/usr/bin/batadv-vis -s -i bat0
+ExecStart=/usr/sbin/batadv-vis -s -i bat0
 
 [Install]
 WantedBy=multi-user.target
@@ -172,6 +172,7 @@ After=network-online.target
 [Service]
 Type=simple
 ExecStart=/opt/raspbian-game-node-setup/setup.sh
+WorkingDirectory=/opt/raspbian-game-node-setup
 [Install]
 WantedBy=multi-user.target
 EOF
