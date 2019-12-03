@@ -158,7 +158,7 @@ echo "vernemq               soft     nofile          65536" >> /etc/security/lim
 echo "vernemq               hard     nofile          65536" >> /etc/security/limits.d/vernemq.conf
 
 echo "Add ansible"
-apt-get install -y python3 python3-dev python3-pip
+apt-get install -y python3 python3-dev python3-pip netifaces
 yes | pip3 install ansible
 
 echo "Install first boot setup scripts"
