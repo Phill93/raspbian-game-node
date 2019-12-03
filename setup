@@ -32,7 +32,7 @@ locale-gen en_US.UTF-8
 
 echo "Installing packages."
 apt-get -y update
-apt-get -y install git batctl alfred wget libssl-dev ncurses-dev
+apt-get -y install git batctl alfred wget libssl-dev ncurses-dev cmake libjansson-dev zlib1g-dev jq
 echo "Load batman-adv kernel module at boot"
 echo 'batman-adv' | sudo tee --append /etc/modules
 
@@ -90,6 +90,15 @@ ExecStart=/usr/bin/batadv-vis -s -i bat0
 [Install]
 WantedBy=multi-user.target
 EOF
+
+cd /home/$USR
+git clone https://github.com/ffnord/alfred-json
+cd alfred-json
+mkdir build
+cd build
+cmake ../
+make
+make install
 
 echo "Installing Erlang OTP"
 cd /home/$USR
