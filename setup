@@ -32,7 +32,7 @@ locale-gen en_US.UTF-8
 
 echo "Installing packages."
 apt-get -y update
-apt-get -y install git batctl alfred wget libssl-dev ncurses-dev cmake libjansson-dev zlib1g-dev jq
+apt-get -y install git batctl alfred wget libssl-dev ncurses-dev cmake libjansson-dev zlib1g-dev jq mosquitto-clients
 echo "Load batman-adv kernel module at boot"
 echo 'batman-adv' | sudo tee --append /etc/modules
 
